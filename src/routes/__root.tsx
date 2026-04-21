@@ -1,6 +1,11 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { CartProvider } from "@/contexts/CartContext";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { CartDrawer } from "@/components/CartDrawer";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 
 function NotFoundComponent() {
   return (
@@ -29,14 +34,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Sri Ruchi Pachallu — Homemade Andhra Pickles" },
+      { name: "description", content: "Authentic homemade Andhra & Telangana pickles. Veg & non-veg. Made with love, fresh spices and zero preservatives." },
+      { name: "author", content: "Sri Ruchi Pachallu" },
+      { property: "og:title", content: "Sri Ruchi Pachallu — Homemade Andhra Pickles" },
+      { property: "og:description", content: "Homemade Taste, Pure Trust. Order traditional veg & non-veg pickles direct via WhatsApp." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -65,5 +69,17 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <CartProvider>
+      <div className="min-h-screen flex flex-col bg-background text-foreground">
+        <Navbar />
+        <main className="flex-1 pt-20">
+          <Outlet />
+        </main>
+        <Footer />
+        <CartDrawer />
+        <FloatingWhatsApp />
+      </div>
+    </CartProvider>
+  );
 }
