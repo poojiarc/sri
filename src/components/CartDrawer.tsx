@@ -1,24 +1,63 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, Trash2, ShoppingBag, User, Phone, MapPin } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { toast } from "sonner";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const WHATSAPP_NUMBER = "919133912973";
+
+const checkoutSchema = z.object({
+  name: z.string().trim().min(2, "Enter your full name").max(80, "Name is too long"),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^[0-9+()\-\s]{10,16}$/, "Enter a valid phone number"),
+  address: z.string().trim().min(10, "Enter your delivery address").max(240, "Address is too long"),
+});
+
+type CheckoutValues = z.infer<typeof checkoutSchema>;
+type CheckoutErrors = Partial<Record<keyof CheckoutValues, string>>;
 
 export function CartDrawer() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, total, clear } = useCart();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [errors, setErrors] = useState<CheckoutErrors>({});
+
+  const itemCount = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    [items],
+  );
+
+  const validateField = (field: keyof CheckoutValues, value: string) => {
+    const result = checkoutSchema.shape[field].safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [field]: result.success ? undefined : result.error.issues[0]?.message,
+    }));
+  };
 
   const checkout = () => {
     if (items.length === 0) return;
-    if (!name.trim() || !phone.trim() || !address.trim()) {
-      toast.error("Please fill in your name, phone and address.");
+    const parsed = checkoutSchema.safeParse({ name, phone, address });
+
+    if (!parsed.success) {
+      const nextErrors: CheckoutErrors = {};
+      for (const issue of parsed.error.issues) {
+        const field = issue.path[0] as keyof CheckoutValues;
+        if (!nextErrors[field]) nextErrors[field] = issue.message;
+      }
+      setErrors(nextErrors);
+      toast.error("Please complete your delivery details.");
       return;
     }
+
+    const values = parsed.data;
     const lines = items.map(
       (i, idx) =>
         `${idx + 1}. ${i.name} (${i.size}) × ${i.quantity} = ₹${i.price * i.quantity}`,
@@ -26,9 +65,9 @@ export function CartDrawer() {
     const raw =
       `🌶️ *New Order — Sri Ruchi Pachallu* 🌶️\n\n` +
       `*Customer Details*\n` +
-      `👤 Name: ${name}\n` +
-      `📞 Phone: ${phone}\n` +
-      `📍 Address: ${address}\n\n` +
+      `👤 Name: ${values.name}\n` +
+      `📞 Phone: ${values.phone}\n` +
+      `📍 Address: ${values.address}\n\n` +
       `*Order*\n` +
       lines.join("\n") +
       `\n\n*Total: ₹${total}*\n\nPlease confirm availability and delivery.`;
@@ -141,49 +180,94 @@ export function CartDrawer() {
             </div>
 
             {items.length > 0 && (
-              <div className="border-t p-5 space-y-3 bg-card/40">
-                <div className="space-y-2">
-                  <label className="block">
-                    <span className="sr-only">Name</span>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Your full name"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-                      />
+              <div className="border-t bg-card/60 p-5 backdrop-blur-sm">
+                <div className="rounded-2xl border bg-background/85 p-4 shadow-soft space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-display text-lg font-bold text-foreground">Delivery details</p>
+                      <p className="text-xs text-muted-foreground">These details will be included in your WhatsApp order.</p>
                     </div>
-                  </label>
-                  <label className="block">
-                    <span className="sr-only">Phone</span>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Phone number"
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-                      />
+                    <div className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+                      {itemCount} item{itemCount > 1 ? "s" : ""}
                     </div>
-                  </label>
-                  <label className="block">
-                    <span className="sr-only">Address</span>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="space-y-1.5">
+                      <span className="text-xs font-medium text-muted-foreground">Full name</span>
+                      <div className="relative">
+                        <User className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="text"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            if (errors.name) validateField("name", e.target.value);
+                          }}
+                          onBlur={(e) => validateField("name", e.target.value)}
+                          placeholder="Your full name"
+                          maxLength={80}
+                          className="h-11 rounded-xl border-input bg-background pl-9"
+                          aria-invalid={Boolean(errors.name)}
+                        />
+                      </div>
+                      {errors.name && <p className="text-[11px] text-destructive">{errors.name}</p>}
+                    </label>
+
+                    <label className="space-y-1.5">
+                      <span className="text-xs font-medium text-muted-foreground">Phone number</span>
+                      <div className="relative">
+                        <Phone className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="tel"
+                          inputMode="tel"
+                          value={phone}
+                          onChange={(e) => {
+                            const next = e.target.value.replace(/[^0-9+()\-\s]/g, "");
+                            setPhone(next);
+                            if (errors.phone) validateField("phone", next);
+                          }}
+                          onBlur={(e) => validateField("phone", e.target.value)}
+                          placeholder="Phone number"
+                          maxLength={16}
+                          className="h-11 rounded-xl border-input bg-background pl-9"
+                          aria-invalid={Boolean(errors.phone)}
+                        />
+                      </div>
+                      {errors.phone && <p className="text-[11px] text-destructive">{errors.phone}</p>}
+                    </label>
+                  </div>
+
+                  <label className="space-y-1.5 block">
+                    <span className="text-xs font-medium text-muted-foreground">Delivery address</span>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <textarea
+                      <MapPin className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Textarea
                         value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        placeholder="Full delivery address"
-                        rows={2}
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                        onChange={(e) => {
+                          setAddress(e.target.value);
+                          if (errors.address) validateField("address", e.target.value);
+                        }}
+                        onBlur={(e) => validateField("address", e.target.value)}
+                        placeholder="House / street / area / landmark"
+                        rows={3}
+                        maxLength={240}
+                        className="min-h-[88px] rounded-xl border-input bg-background pl-9 resize-none"
+                        aria-invalid={Boolean(errors.address)}
                       />
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      {errors.address ? (
+                        <p className="text-[11px] text-destructive">{errors.address}</p>
+                      ) : (
+                        <p className="text-[11px] text-muted-foreground">Add a complete address for faster confirmation.</p>
+                      )}
+                      <p className="text-[11px] text-muted-foreground">{address.length}/240</p>
                     </div>
                   </label>
                 </div>
-                <div className="flex items-center justify-between">
+
+                <div className="mt-4 flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="font-display text-2xl font-bold text-primary">₹{total}</span>
                 </div>
@@ -192,7 +276,7 @@ export function CartDrawer() {
                 </p>
                 <button
                   onClick={checkout}
-                  className="w-full py-3.5 rounded-full bg-[#25D366] text-white font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-transform shadow-warm"
+                  className="mt-3 w-full rounded-full bg-leaf py-3.5 text-sm font-semibold text-primary-foreground shadow-warm transition-transform hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2"
                 >
                   <WhatsAppIcon className="h-5 w-5" />
                   Checkout via WhatsApp
