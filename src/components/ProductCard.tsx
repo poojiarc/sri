@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Check, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Product } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
@@ -7,8 +7,10 @@ import { useCart } from "@/contexts/CartContext";
 export function ProductCard({ product }: { product: Product }) {
   const [sizeIdx, setSizeIdx] = useState(0);
   const [qty, setQty] = useState(1);
-  const { addItem } = useCart();
+  const { addItem, hasItem, removeItem, setIsOpen } = useCart();
   const size = product.sizes[sizeIdx];
+  const cartId = `${product.id}-${size.label}`;
+  const inCart = hasItem(cartId);
 
   const add = () => {
     addItem({
@@ -101,13 +103,32 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        <button
-          onClick={add}
-          className="mt-4 w-full py-3 rounded-full bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all shadow-soft hover:shadow-warm"
-        >
-          <ShoppingCart className="h-4 w-4" />
-          Add to Cart
-        </button>
+        {inCart ? (
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="py-3 rounded-full bg-leaf/15 text-leaf font-semibold flex items-center justify-center gap-2 hover:bg-leaf/25 transition-all"
+            >
+              <Check className="h-4 w-4" />
+              In Cart
+            </button>
+            <button
+              onClick={() => removeItem(cartId)}
+              className="py-3 rounded-full bg-muted text-foreground font-semibold flex items-center justify-center gap-2 hover:bg-destructive/10 hover:text-destructive transition-all"
+            >
+              <Trash2 className="h-4 w-4" />
+              Remove
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={add}
+            className="mt-4 w-full py-3 rounded-full bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all shadow-soft hover:shadow-warm"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            Add to Cart
+          </button>
+        )}
       </div>
     </motion.div>
   );

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, Phone, Mail, MapPin, Instagram, Facebook, Linkedin, MessageCircle, Home, Info, Sparkles, ShoppingBag, Truck, Leaf, Flame } from "lucide-react";
+import { Heart, Phone, Mail, MapPin, Instagram, Youtube, Home, Info, Sparkles, ShoppingBag, Truck, Leaf, Flame } from "lucide-react";
 import { Logo } from "./Logo";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 export function Footer() {
   return (
@@ -19,16 +20,13 @@ export function Footer() {
             </p>
             <div className="mt-5 flex items-center gap-3">
               <a href="https://wa.me/919133912973" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
-                <MessageCircle className="h-4 w-4" />
+                <WhatsAppIcon className="h-4 w-4" />
               </a>
-              <a href="https://instagram.com/sriruchipachallu" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
+              <a href="https://www.instagram.com/sriruchipachallu?igsh=Y3AycnN0dDB5bncw" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="#" aria-label="Facebook" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
-                <Facebook className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="LinkedIn" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
-                <Linkedin className="h-4 w-4" />
+              <a href="https://youtube.com/@sriruchipachalu?si=4xQw1aA0lmDQr0-t" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="h-9 w-9 rounded-full bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all flex items-center justify-center">
+                <Youtube className="h-4 w-4" />
               </a>
             </div>
           </div>

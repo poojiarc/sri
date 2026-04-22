@@ -27,6 +27,7 @@ interface CartContextValue {
   removeItem: (id: string) => void;
   updateQuantity: (id: string, qty: number) => void;
   clear: () => void;
+  hasItem: (id: string) => boolean;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -74,6 +75,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clear = () => setItems([]);
 
+  const hasItem = (id: string) => items.some((p) => p.id === id);
+
   const { count, total } = useMemo(() => {
     let c = 0, t = 0;
     for (const i of items) { c += i.quantity; t += i.quantity * i.price; }
@@ -82,7 +85,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ items, count, total, isOpen, setIsOpen, addItem, removeItem, updateQuantity, clear }}
+      value={{ items, count, total, isOpen, setIsOpen, addItem, removeItem, updateQuantity, clear, hasItem }}
     >
       {children}
     </CartContext.Provider>
