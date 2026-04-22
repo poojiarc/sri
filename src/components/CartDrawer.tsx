@@ -142,18 +142,59 @@ export function CartDrawer() {
 
             {items.length > 0 && (
               <div className="border-t p-5 space-y-3 bg-card/40">
+                <div className="space-y-2">
+                  <label className="block">
+                    <span className="sr-only">Name</span>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Your full name"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                      />
+                    </div>
+                  </label>
+                  <label className="block">
+                    <span className="sr-only">Phone</span>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="Phone number"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                      />
+                    </div>
+                  </label>
+                  <label className="block">
+                    <span className="sr-only">Address</span>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <textarea
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Full delivery address"
+                        rows={2}
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                      />
+                    </div>
+                  </label>
+                </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Subtotal</span>
                   <span className="font-display text-2xl font-bold text-primary">₹{total}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Orders are confirmed via WhatsApp. Delivery & payment details on chat.
+                  Your details & order are sent directly via WhatsApp for confirmation.
                 </p>
                 <button
                   onClick={checkout}
                   className="w-full py-3.5 rounded-full bg-[#25D366] text-white font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-transform shadow-warm"
                 >
-                  <MessageCircle className="h-5 w-5" />
+                  <WhatsAppIcon className="h-5 w-5" />
                   Checkout via WhatsApp
                 </button>
                 <button
