@@ -1,23 +1,41 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, MessageCircle, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, User, Phone, MapPin } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { WhatsAppIcon } from "./WhatsAppIcon";
+import { toast } from "sonner";
 
 const WHATSAPP_NUMBER = "919133912973";
 
 export function CartDrawer() {
   const { items, isOpen, setIsOpen, updateQuantity, removeItem, total, clear } = useCart();
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const checkout = () => {
     if (items.length === 0) return;
+    if (!name.trim() || !phone.trim() || !address.trim()) {
+      toast.error("Please fill in your name, phone and address.");
+      return;
+    }
     const lines = items.map(
       (i, idx) =>
         `${idx + 1}. ${i.name} (${i.size}) × ${i.quantity} = ₹${i.price * i.quantity}`,
     );
-    const message =
-      `🌶️ *New Order — Sri Ruchi Pachallu* 🌶️%0A%0A` +
-      lines.join("%0A") +
-      `%0A%0A*Total: ₹${total}*%0A%0APlease confirm availability and delivery details.`;
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    const raw =
+      `🌶️ *New Order — Sri Ruchi Pachallu* 🌶️\n\n` +
+      `*Customer Details*\n` +
+      `👤 Name: ${name}\n` +
+      `📞 Phone: ${phone}\n` +
+      `📍 Address: ${address}\n\n` +
+      `*Order*\n` +
+      lines.join("\n") +
+      `\n\n*Total: ₹${total}*\n\nPlease confirm availability and delivery.`;
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(raw)}`,
+      "_blank",
+    );
   };
 
   return (
