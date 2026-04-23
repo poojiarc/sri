@@ -1,18 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Truck, Package, Gift, Clock, Leaf, Flame, ShieldCheck, MapPin, Heart, Sparkles } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-
-export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: "Services — Sri Ruchi Pachallu" },
-      { name: "description", content: "Veg & non-veg pickles, fresh batches, fast delivery, bulk orders, and combo offers from Sri Ruchi Pachallu." },
-      { property: "og:title", content: "Services — Sri Ruchi Pachallu" },
-      { property: "og:description", content: "Homemade pickles, fast delivery, bulk orders and combo offers." },
-    ],
-  }),
-  component: ServicesPage,
-});
 
 const services = [
   { icon: Leaf, title: "Veg & Non-Veg Pickles", desc: "From mango avakaya to chicken & mutton pickles — a wide variety to suit every palate." },
@@ -26,6 +15,10 @@ const services = [
 ];
 
 export default function ServicesPage() {
+  useEffect(() => {
+    document.title = "Services — Sri Ruchi Pachallu";
+  }, []);
+
   return (
     <div className="overflow-x-hidden">
       <section className="relative gradient-hero py-16 md:py-24">

@@ -1,21 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { ProductCard } from "@/components/ProductCard";
 import { products, type Category } from "@/data/products";
-
-export const Route = createFileRoute("/products")({
-  head: () => ({
-    meta: [
-      { title: "Our Pickles — Sri Ruchi Pachallu" },
-      { name: "description", content: "Browse all veg & non-veg homemade pickles. Available in 250g, 500g and 1kg jars." },
-      { property: "og:title", content: "Our Pickles — Sri Ruchi Pachallu" },
-      { property: "og:description", content: "Veg & non-veg Andhra pickles in 250g, 500g, 1kg. Order via WhatsApp." },
-    ],
-  }),
-  component: ProductsPage,
-});
 
 const filters: { label: string; value: "all" | Category }[] = [
   { label: "All", value: "all" },
@@ -23,7 +10,11 @@ const filters: { label: string; value: "all" | Category }[] = [
   { label: "Non-Veg", value: "non-veg" },
 ];
 
-function ProductsPage() {
+export default function ProductsPage() {
+  useEffect(() => {
+    document.title = "Our Pickles — Sri Ruchi Pachallu";
+  }, []);
+
   const [filter, setFilter] = useState<"all" | Category>("all");
   const [query, setQuery] = useState("");
 

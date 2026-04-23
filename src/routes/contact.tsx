@@ -1,21 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Instagram, Facebook, Linkedin, Clock } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Sri Ruchi Pachallu" },
-      { name: "description", content: "Reach out to Sri Ruchi Pachallu in Hyderabad. Phone, email, address and social media — order or ask anything." },
-      { property: "og:title", content: "Contact — Sri Ruchi Pachallu" },
-      { property: "og:description", content: "Hyderabad, Tilak Nagar, Bhag Amberpet. WhatsApp, call or email us." },
-    ],
-  }),
-  component: ContactPage,
-});
+export default function ContactPage() {
+  useEffect(() => {
+    document.title = "Contact — Sri Ruchi Pachallu";
+  }, []);
 
-function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
 
