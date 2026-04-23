@@ -1,21 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Instagram, Facebook, Linkedin, Clock } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Sri Ruchi Pachallu" },
-      { name: "description", content: "Reach out to Sri Ruchi Pachallu in Hyderabad. Phone, email, address and social media — order or ask anything." },
-      { property: "og:title", content: "Contact — Sri Ruchi Pachallu" },
-      { property: "og:description", content: "Hyderabad, Tilak Nagar, Bhag Amberpet. WhatsApp, call or email us." },
-    ],
-  }),
-  component: ContactPage,
-});
+export default function ContactPage() {
+  useEffect(() => {
+    document.title = "Contact — Sri Ruchi Pachallu";
+  }, []);
 
-function ContactPage() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
 
@@ -77,16 +68,16 @@ function ContactPage() {
             <div className="p-5 rounded-3xl bg-card border shadow-soft">
               <h3 className="font-display text-lg font-bold">Follow us</h3>
               <div className="mt-3 flex items-center gap-3">
-                <a href="https://wa.me/919133912973" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="h-11 w-11 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition-transform">
+                <a href="https://wa.me/919133912973" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="h-11 w-11 rounded-full bg-leaf text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform">
                   <MessageCircle className="h-5 w-5" />
                 </a>
                 <a href="https://instagram.com/sriruchipachallu" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="h-11 w-11 rounded-full gradient-spice text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform">
                   <Instagram className="h-5 w-5" />
                 </a>
-                <a href="#" aria-label="Facebook" className="h-11 w-11 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 transition-transform">
+                <a href="#" aria-label="Facebook" className="h-11 w-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" aria-label="LinkedIn" className="h-11 w-11 rounded-full bg-[#0A66C2] text-white flex items-center justify-center hover:scale-110 transition-transform">
+                <a href="#" aria-label="LinkedIn" className="h-11 w-11 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:scale-110 transition-transform">
                   <Linkedin className="h-5 w-5" />
                 </a>
               </div>

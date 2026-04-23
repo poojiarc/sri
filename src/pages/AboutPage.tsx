@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Heart, Leaf, ShieldCheck, Sparkles, Flame, Users } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import aboutImg from "@/assets/about-process.jpg";
@@ -6,20 +6,11 @@ import spices from "@/assets/spices-banner.jpg";
 import hero1 from "@/assets/hero-pickle-1.jpg";
 import hero3 from "@/assets/hero-pickle-3.jpg";
 
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — Sri Ruchi Pachallu" },
-      { name: "description", content: "Sri Ruchi Pachallu — a homemade pickle brand bringing authentic Andhra flavors with traditional recipes and pure ingredients." },
-      { property: "og:title", content: "About — Sri Ruchi Pachallu" },
-      { property: "og:description", content: "A tradition of taste you can trust. Discover the homemade Andhra pickle story." },
-      { property: "og:image", content: aboutImg },
-    ],
-  }),
-  component: AboutPage,
-});
+export default function AboutPage() {
+  useEffect(() => {
+    document.title = "About — Sri Ruchi Pachallu";
+  }, []);
 
-function AboutPage() {
   return (
     <div className="overflow-x-hidden">
       <section className="relative gradient-hero py-16 md:py-24">

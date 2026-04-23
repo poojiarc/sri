@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Leaf, Flame, ShieldCheck, Truck, Heart, Star } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
@@ -11,21 +11,9 @@ import hero4 from "@/assets/hero-pickle-4.jpg";
 import aboutImg from "@/assets/about-process.jpg";
 import spices from "@/assets/spices-banner.jpg";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Sri Ruchi Pachallu — Homemade Andhra & Telangana Pickles" },
-      { name: "description", content: "Order traditional homemade pickles online — Mango Avakaya, Gongura, Chicken, Mutton, Prawns. Pure ingredients, no preservatives." },
-      { property: "og:title", content: "Sri Ruchi Pachallu — Homemade Taste, Pure Trust" },
-      { property: "og:description", content: "Authentic Andhra pickles delivered to your home. Order via WhatsApp." },
-    ],
-  }),
-  component: HomePage,
-});
-
 const heroImages = [hero1, hero2, hero3, hero4];
 
-function HomePage() {
+export default function HomePage() {
   const featured = products.slice(0, 6);
 
   return (

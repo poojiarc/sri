@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.jpg";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
