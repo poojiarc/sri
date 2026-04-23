@@ -101,17 +101,22 @@ export function Navbar() {
               exit={{ opacity: 0, y: -10 }}
               className="lg:hidden mt-2 glass rounded-2xl p-3 shadow-warm"
             >
-              {links.map(({ to, label, icon: Icon }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary/10 transition-colors"
-                  activeProps={{ className: "bg-primary/10 text-primary" }}
-                >
-                  <Icon className="h-4 w-4" />
-                  {label}
-                </Link>
-              ))}
+              {links.map(({ to, label, icon: Icon }) => {
+                const active = location.pathname === to;
+
+                return (
+                  <Link
+                    key={to}
+                    to={to}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                      active ? "bg-primary/10 text-primary" : "hover:bg-primary/10"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {label}
+                  </Link>
+                );
+              })}
             </motion.nav>
           )}
         </AnimatePresence>
