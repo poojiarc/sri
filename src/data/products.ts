@@ -7,6 +7,10 @@ import chicken from "@/assets/product-chicken.jpg";
 import mutton from "@/assets/product-mutton.jpg";
 import prawns from "@/assets/product-prawns.jpg";
 import fish from "@/assets/product-fish.jpg";
+import gonguramutton from "@/assets/mutton pickle.jpg";
+import gongurachicken from "@/assets/gongura-chiken.jpg"; 
+import bonechiken from "@/assets/chiken-withbone.jpg";
+
 
 export type Category = "veg" | "non-veg";
 
@@ -84,7 +88,7 @@ export const products: Product[] = [
     name: "Chicken Pickle (with bone)",
     telugu: "చికెన్ ఊరగాయ",
     category: "non-veg",
-    image: chicken,
+    image: bonechiken,
     description: "Tender bone-in chicken slow-cooked in fiery Andhra masala. Long-shelf homemade.",
     sizes: [
       { label: "250g", price: 300 },
@@ -110,7 +114,7 @@ export const products: Product[] = [
     name: "Mutton Pickle",
     telugu: "మటన్ ఊరగాయ",
     category: "non-veg",
-    image: mutton,
+    image: gonguramutton,
     description: "Slow-cooked mutton in robust Telangana-style spices. A festive favorite.",
     sizes: [
       { label: "250g", price: 480 },
@@ -149,7 +153,7 @@ export const products: Product[] = [
     name: "Gongura Chicken Pickle",
     telugu: "గోంగూర చికెన్",
     category: "non-veg",
-    image: chicken,
+    image: gongurachicken,
     description: "Two legends in one jar — gongura tang meets fiery Andhra chicken.",
     sizes: [
       { label: "250g", price: 380 },
