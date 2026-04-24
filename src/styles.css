@@ -234,3 +234,8 @@
   opacity: 1;
   transform: translateY(0);
 }
+/* Make numbers use normal font style */
+body {
+  font-variant-numeric: normal;
+  font-feature-settings: "lnum" 1, "tnum" 0;
+}
